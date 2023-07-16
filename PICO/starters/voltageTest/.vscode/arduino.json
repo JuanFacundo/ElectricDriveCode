@@ -1,0 +1,6 @@
+{
+    "board": "rp2040:rp2040:rpipico",
+    "port": "COM3",
+    "programmer": "arduino:avrispmkii",
+    "configuration": "flash=2097152_0,freq=133,opt=Small,rtti=Disabled,stackprotect=Disabled,exceptions=Disabled,dbgport=Disabled,dbglvl=None,usbstack=picosdk,ipstack=ipv4only"
+}

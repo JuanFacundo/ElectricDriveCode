@@ -307,50 +307,26 @@ void CANreader(){
     if (canMsgIn.id == 0x055){
       receive55();
       //Serial.println(phy_rpm);
-      //printer55();
+      printer55();
     } //*/
     //*
     else if (canMsgIn.id == 0x097){
       receive97();
-      //printer97();
+      printer97();
     } //*/
     //*
     else if (canMsgIn.id == 0x106){
       receive106();
     } //*/
     //*
-    else if (canMsgIn.id == 0x18000010){  //este es el id que se ve en la linea
-      //printer16();                      //este es el lector del mensaje
-    } //*/
-    //*
-    else if (canMsgIn.id == 0x18000011){
-      //printer16();
-    } //*/
-    //*
-    else if (canMsgIn.id == 0x18000013){
-      //printer16();
-    } //*/
-    //*
-    else if (canMsgIn.id == 0x18000014){
-      //printer15();
-    } //*/
-    //*
-    else if (canMsgIn.id == 0x18000015){
-      //printer16();
-    } //*/
-    //*
-    else if (canMsgIn.id == 0x18000016){
-      //printer16();
-    } //*/
-    //*
     else if (canMsgIn.id == 0x6B0){
       receive6B0();
-//      printer6B0();
+      printer6B0();
     } //*/
     //*
     else if (canMsgIn.id == 0x6B1){
       receive6B1();
-//      printer6B1();
+      printer6B1();
     } //*/
     //*
     else if (canMsgIn.id == 0x655){
@@ -743,8 +719,7 @@ float filterTorq(int torq){
     torq1 = torq;
   }
 
-  /*
-  //*/  
+  /*  
   Serial.print(0);
   Serial.print(" ");
   Serial.print(50);
@@ -753,6 +728,7 @@ float filterTorq(int torq){
   Serial.print(DCL*DCL_air/100);
   Serial.print(" ");
   //*/
+  /*
   Serial.print(packCurr);
   Serial.print(" ");
   Serial.print(torq);

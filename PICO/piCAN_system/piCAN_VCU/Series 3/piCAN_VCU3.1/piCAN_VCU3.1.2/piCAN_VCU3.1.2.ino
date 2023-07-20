@@ -9,6 +9,15 @@
 
 
 /////////////////////////////////////////////////////////////////GLOBALS/////////////////////////////////////////////////////////////////
+//-------------editables--------------//
+static const int DCL_air = 1; //porcentage of DCL that will be used as reference.
+#define maxTorq 50.0
+#define pressTime 2000 //time pressing the start/stop button in ms
+//------------/editables--------------//
+
+
+
+
 //-------pins----------//
 // static const byte MCP2515_INT  = 1; // INT output of MCP2515  //MCP2515 CON INT
 static const byte MCP2515_INT = 255; // INT output of MCP2515  //MCP2515 SIN INT
@@ -77,7 +86,6 @@ int lowTemp = 0;
 
 //actuators
 byte shiftNow = 0;
-static const int DCL_air = 1; //porcentage of DCL that will be used as reference.
 float holdTorq = 0;
 //------/physical-variables----//
 
@@ -87,7 +95,6 @@ float holdTorq = 0;
 long lastSend = millis();
 #define readInterval 11
 long lastRead = millis();
-#define pressTime 2000 //time pressing the start/stop button in ms
 long sincePress = millis();
 //------/timers-------//
 
@@ -674,7 +681,7 @@ float askTorqRead(){
   if (medTl < 320){
     torq=0;
   } else if (medTl >= 320){
-    torq = round((50.0/590.0) * (medTl - 320)); //map(medTl,312,910,0,30); //------------------MAX TORQ
+    torq = round((maxTorq/590.0) * (medTl - 320)); //----------------------------------------torq curve
     /*
      Para el modificar la relacion entre amplitud de DTS y amplitud de torque
      requerido se usa la ecuacion "y = m*(x-a)" donde 

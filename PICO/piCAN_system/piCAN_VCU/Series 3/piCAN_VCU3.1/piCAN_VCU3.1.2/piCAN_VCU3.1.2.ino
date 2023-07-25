@@ -106,6 +106,7 @@ bool onoff = 0;
 bool oldonoff = 0;
 bool StartStopPress = 0;
 bool DCL_flag = 0;
+unsigned char stuck = 0;
 //------/counters-&-flags-------//
 
 //--------------RAM-------------//
@@ -297,6 +298,10 @@ void CANsender(){
       printer81();
     } else {
       digitalWrite(LED_BUILTIN, LOW);
+      stuck++;
+      if (stuck > 10){
+        refreshCAN();
+      }
       //Serial.println("tx full");
     }
   }
@@ -357,6 +362,18 @@ void CANreader(){
       Serial.println();
     } //*/
   }
+}
+
+void refreshCAN(){
+  can.end();
+  
+  delay(20);
+  
+  ACAN2515Settings settings(QUARTZ_FREQUENCY, 500UL * 1000UL); // CAN bit rate 500 kb/s
+  settings.mRequestedMode = ACAN2515Settings::NormalMode;      // NormalMode (default value), ListenOnlyMode,LoopBackMode, SleepMode.
+  settings.mTransmitBuffer0Size = 30 ;
+  //const uint16_t errorCode = can.begin(settings, [] {can.isr();}); //MCP2515 CON INT
+  const uint16_t errorCode = can.begin(settings, NULL); // MCP2515 SIN INT
 }
 //-----/canners-----//
 

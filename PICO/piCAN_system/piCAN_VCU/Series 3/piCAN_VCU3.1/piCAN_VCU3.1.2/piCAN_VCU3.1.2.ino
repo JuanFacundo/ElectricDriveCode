@@ -10,8 +10,8 @@
 
 /////////////////////////////////////////////////////////////////GLOBALS/////////////////////////////////////////////////////////////////
 //-------------editables--------------//
-static const int DCL_air = 1; //porcentage of DCL that will be used as reference.
-#define maxTorq 50.0
+static const int DCL_air = 95; //porcentage of DCL that will be used as reference.
+#define maxTorq 350.0
 #define pressTime 2000 //time pressing the start/stop button in ms
 //------------/editables--------------//
 

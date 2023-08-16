@@ -29,7 +29,7 @@ void setup() {
   Serial.begin(38400);
   
   setupCAN();
-  setupMssg();
+  setupMssg55();
   delay(300);
 }
 
@@ -98,18 +98,30 @@ void setupCAN(){
   }
 
   canMsg.ext = false;
-  canMsg.id = 0x055;
   canMsg.len = 8;
 }
 
 
-void setupMssg(){
-  canMsg.data[0] = 0x04;
-  canMsg.data[1] = 0x90;
-  canMsg.data[2] = 0x10;
-  canMsg.data[3] = 0xFA;
+void setupMssg55(){
+  canMsg.id = 0x055;
+  
+  int64_t phy_rpm = 0;
+  float phy_torq = 0;
+
+
+  int64_t hex_rpm = phy_rpm + 15000;
+  canMsg.data[0] = highByte(hex_rpm);
+  canMsg.data[1] = lowByte(hex_rpm);
+  int64_t hex_torq = (phy_torq + 400)*5;
+  canMsg.data[2] = ((hex_torq >> 4) & 0xF);
+  canMsg.data[3] = (hex_torq & 0xF) << 4;
   canMsg.data[4] = 0x00;
-  canMsg.data[5] = 0x02;
-  canMsg.data[6] = 0xFF;
-  canMsg.data[7] = 0xFF;
+  canMsg.data[5] = 0x00;
+  canMsg.data[6] = (canMsg.data[6] + 1) & 0xF;
+  
+  byte checksum;
+  checksum = canMsg.data[0] + canMsg.data[1] + canMsg.data[2] + canMsg.data[3] + canMsg.data[4] + canMsg.data[5] + canMsg.data[6];
+  checksum = checksum ^ 0xFF;
+  
+  canMsg.data[7] = checksum;
 }

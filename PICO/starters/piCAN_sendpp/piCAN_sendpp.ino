@@ -37,13 +37,20 @@ void setup() {
 
 
 void loop() {
-  can.poll();
-  const bool ok = can.tryToSend(canMsg);
-  if (ok){
-    Serial.println("sent");
-  } else {
-    Serial.println("try again");
-  }
+  setupMssg55();
+  sender();
+  delay(10);
+
+  setupMssg97();
+  sender();
+  delay(10);
+
+  setupMssg6B0();
+  sender();
+  delay(10);
+
+  setupMssg6B1();
+  sender();
   delay(10);
 }
 
@@ -51,7 +58,16 @@ void loop() {
 
 
 
+void sender(){
+  can.poll();
 
+  const bool ok = can.tryToSend(canMsg);
+  if (ok){
+    Serial.println("sent");
+  } else {
+    Serial.println("try again");
+  }
+}
 
 
 
@@ -124,4 +140,53 @@ void setupMssg55(){
   checksum = checksum ^ 0xFF;
   
   canMsg.data[7] = checksum;
+}
+
+
+void setupMssg97(){
+  canMsg.id = 0x97;
+
+  int phy_curr = 0;
+  byte IGBT_temp = 20;
+  byte Moto_temp = 20;
+  
+  
+  canMsg.data[0] = 0;
+  canMsg.data[1] = 0;
+  canMsg.data[2] = 0;
+  int hex_curr = phy_curr + 600;
+  canMsg.data[3] = hex_curr >> 4;
+  canMsg.data[4] = (hex_curr << 4) | ((IGBT_temp >> 4) & 0xF);
+  canMsg.data[5] = (IGBT_temp << 4) | (Moto_temp >> 4);
+  canMsg.data[6] = (Moto_temp << 4) | ((canMsg.data[6]+1) & 0x0F);
+
+  byte checksum;
+  checksum = canMsg.data[0] + canMsg.data[1] + canMsg.data[2] + canMsg.data[3] + canMsg.data[4] + canMsg.data[5] + canMsg.data[6];
+  checksum = checksum ^ 0xFF;
+  
+  canMsg.data[7] = checksum;
+}
+
+
+void setupMssg6B0(){
+  canMsg.data[0] = 0x07;
+  canMsg.data[1] = 0xD0;
+  canMsg.data[2] = 0xF0;
+  canMsg.data[3] = 0x0F;
+  canMsg.data[4] = 100;
+  canMsg.data[5] = 0x01;
+  canMsg.data[6] = 0;
+  canMsg.data[7] = 0;
+}
+
+
+void setupMssg6B1(){
+  canMsg.data[0] = 0;
+  canMsg.data[0] = 0;
+  canMsg.data[0] = 0;
+  canMsg.data[0] = 0;
+  canMsg.data[0] = 0x20;
+  canMsg.data[0] = 0x40;
+  canMsg.data[0] = 0;
+  canMsg.data[0] = 0;
 }
